@@ -1,0 +1,63 @@
+- landscape: hcpbd-staging
+  grafanaElasticIP: 172.18.105.121
+  username: admin
+  password: ####
+  uptime_endpoints:
+   - kafka: https://kafkauptime.cfapps.staging.hanavlab.ondemand.com/kafkaUptime/clusterStatus
+   - cassandra-iot: https://cassandra-uptime.cfapps.staging.hanavlab.ondemand.com/uptime?service-name=cassandra_service
+
+- landscape: hcpbd-sic-staging
+  grafanaElasticIP: 172.18.110.74
+  username: admin
+  password: ####
+  uptime_endpoints:
+   - cassandra-iot: https://cassandra-uptime.cfapps.staging.sic.ondemand.com/uptime?service-name=cassandra_service
+   - kafka: https://kafkauptime.cfapps.staging.sic.ondemand.com/kafkaUptime/clusterStatus
+
+- landscape: hcpbd-sagdf-staging
+  grafanaElasticIP: 172.18.110.117
+  username: admin
+  password: ####
+  uptime_endpoints:
+   - kafka: https://kafkauptime.cfapps.industrycloud-staging.siemens.com/kafkaUptime/clusterStatus
+   - cassandra-iot: https://cassandra-uptime.cfapps.industrycloud-staging.siemens.com/uptime?service-name=cassandra_service
+
+- landscape: sagdf-live
+  grafanaElasticIP: 172.18.110.133
+  username: admin
+  password: ####
+  uptime_endpoints:
+
+- landscape: hcpbd-aws-staging
+  grafanaElasticIP: 34.197.98.228
+  username: admin
+  password: ####
+  uptime_endpoints:
+   - kafka: https://kafkauptime.cfapps.stagingaws.hanavlab.ondemand.com/kafkaUptime/clusterStatus
+   - cassandra-iot: https://cassandra-uptime.cfapps.stagingaws.hanavlab.ondemand.com/uptime?service-name=cassandra_service
+   - spark-hcp: https://spark-service-admin.cf.stagingaws.hanavlab.ondemand.com/v1/health/clusters/aad85e3d-dbb7-4714-80d0-97d284c24e4b
+   - spark-iot: https://spark-service-admin.cf.stagingaws.hanavlab.ondemand.com/v1/health/clusters/826ff987-9dbe-4120-8718-cd1fd022dbf8 
+
+- landscape: hcpbd-aws-canary-prod01
+  grafanaElasticIP: 52.58.235.254
+  username: admin
+  password: ####
+  uptime_endpoints:
+   - kafka: https://kafkauptime.cfapps.sap.hana.ondemand.com/kafkaUptime/clusterStatus
+   - cassandra-iot: https://cassandra-uptime.cfapps.sap.hana.ondemand.com/uptime?service-name=cassandra_service_iot
+   - cassandra-tat: https://cassandra-uptime.cfapps.sap.hana.ondemand.com/uptime?service-name=cassandra_service_tat
+   - spark-hcp: https://spark-service-admin.cf.sap.hana.ondemand.com/v1/health/clusters/5f70e980-f04e-48cd-b8cd-c8fdbc224524
+   - spark-iot: https://spark-service-admin.cf.sap.hana.ondemand.com/v1/health/clusters/5dfef79c-e071-434f-841c-9ee2831b5e5e
+   - spark-iot02: https://spark-service-admin.cf.sap.hana.ondemand.com/v1/health/clusters/0771aa8f-b674-44a1-ab00-ea8a09771f6a
+   - spark-iot_perf: https://spark-service-admin.cf.sap.hana.ondemand.com/v1/health/clusters/f0befa2c-20cc-4ae5-947d-36112a41aaa8
+
+- landscape: aws-live
+  grafanaElasticIP: 52.57.104.12
+  username: admin
+  password: ####
+  uptime_endpoints:
+   - kafka: https://kafkauptime.cfapps.eu10.hana.ondemand.com/kafkaUptime/clusterStatus
+   - cassandra-iot: https://cassandra-uptime.cfapps.eu10.hana.ondemand.com/uptime?service-name=cassandra_service
+   - cassandra-tat: https://cassandra-uptime.cfapps.eu10.hana.ondemand.com/uptime?service-name=cassandra_service_tat
+   - spark-iot: https://spark-service-admin.cf.eu10.hana.ondemand.com/v1/health/clusters/7f0e54a7-abe5-42af-89ce-f564dc122ad1
+   - spark-cg: https://spark-service-admin.cf.eu10.hana.ondemand.com/v1/health/clusters/3cf59e91-fc26-44ea-9544-80c517d0cddc

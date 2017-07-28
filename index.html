@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>HCP Big Data Landscape</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<style>
+		/* Set the panel style */
+		.panel-primary {
+			background-color: #0a0f0f !important;
+		}
+		/* Set the header text */	  
+		.navbar-brand {
+			color:black !important;
+			font-size: 36px !important;
+			margin: 0px;
+		}
+		/* Set the header style */
+		.navbar-inverse {
+			background-color: #ff9900;
+			border-color: #080808;
+			padding: 10px;
+		}
+		/* Set the body style */
+		body { 
+			background-color: #0a0f0f;
+		}
+		/* Set the carousel style */
+		.carousel-inner iframe {
+			width: 100%; 
+			min-height: 320px;
+		}
+	</style>
+	<script>
+		$(function() {
+			var coraselFlag = false;
+			function getTime(){ 	// by second
+				var allTimes = $.parseJSON($('#allTimes').val());
+				return allTimes.carouselTime * 1000
+			}
+			function load_next_url() {
+	       		select_bottom().src = dashboards_list[Math.floor(Math.random() * dashboards_list.length)];
+	 			setTimeout(load_next_url, TIMEOUT);
+				setTimeout(change_order, 3000);
+	    	}
+			function select_bottom() {
+				if ( coraselFlag ) {
+					return iframe_2;
+				} else {
+					return iframe_1;
+				}
+			}
+			function change_order() {
+				if ( coraselFlag ) {
+					iframe_1.width = "0%";
+					iframe_2.width = "100%";
+					coraselFlag = true;
+				} else {
+					iframe_2.width = "0%";
+					iframe_1.width = "100%";
+					coraselFlag = false;
+				}
+			}
+			/* Get JSON object*/
+			var allDashboards = $.parseJSON($('#allDashboards').val());
+			var overview = $.parseJSON($('#overview').val());
+			var path = $('#path').val().replace("/","");
+			path = $.parseJSON(path.replace(/%20/g," "));
+			
+			for (var i in allDashboards.dashboards){
+				if (allDashboards.dashboards[i].title == path){
+					var straps = '';
+					var vertical = '';
+					var availability = '';
+					var generalOverview = '';
+					var availabilityCount = 0;
+					var panelFlag = 0;
+					var dashboards_list = [];
+					/* Create the overview iframes */
+					var status = '<iframe src="' + allDashboards.dashboards[i].overviewUrl + '" width="100%" frameborder="0"></iframe>';
+					var uptime = '<iframe src="' + allDashboards.dashboards[i].overviewUrl.replace("landscape-overview","uptime-overview-graphs") + '" width="100%" frameborder="0"></iframe>';
+					document.getElementById("nav-header").innerHTML= allDashboards.dashboards[i].title ;
+					
+					for (var j in allDashboards.dashboards[i].rows) {
+						/* Create the node Availability and Status iframes */
+						if ((allDashboards.dashboards[i].rows[j].title.includes("STATUS")) || (allDashboards.dashboards[i].rows[j].title.includes("Availability"))|| (allDashboards.dashboards[i].rows[j].title.includes("AVAILABILITY"))){
+							for (var k in allDashboards.dashboards[i].rows[j].panels) {
+								availabilityCount++;
+								availability += '<div class="col-sm-colWidth"><iframe src="';
+								availability += allDashboards.dashboards[i].rows[j].panels[k].url;
+								availability += '?panelId=';
+								availability += allDashboards.dashboards[i].rows[j].panels[k].id;
+								availability += '" width="100%" frameborder="0"></iframe></div>';
+							}
+							
+						}
+						/* Create the vertical iframes */
+						else if ((allDashboards.dashboards[i].rows[j].panels.length == 3)&&(panelFlag == 0)){
+							panelFlag = 1;
+							vertical += '<div class="panel-heading">';
+							vertical += allDashboards.dashboards[i].rows[j].title;
+							vertical += '</div>';
+							for (var k in allDashboards.dashboards[i].rows[j].panels) {
+								vertical += '<div class="panel-body"><iframe src="';
+								vertical += allDashboards.dashboards[i].rows[j].panels[k].url;
+								vertical += '?panelId=';
+								vertical += allDashboards.dashboards[i].rows[j].panels[k].id;
+								vertical += '" width="100%" frameborder="0"></iframe></div>';
+							}
+						}
+						/* Create all others iframes */
+						else {
+							straps += '<div class="panel panel-primary"><div class="panel-heading">';
+							straps += allDashboards.dashboards[i].rows[j].title;
+							straps += '</div><div class="panel-body"><div class="row">';
+							var colWidth = parseInt(12/allDashboards.dashboards[i].rows[j].panels.length,10);
+							for (var k in allDashboards.dashboards[i].rows[j].panels) {
+								straps += '<div class="col-sm-';
+								straps += colWidth;
+								straps += '"><iframe src="';
+								straps += allDashboards.dashboards[i].rows[j].panels[k].url;
+								straps += '?panelId=';
+								straps += allDashboards.dashboards[i].rows[j].panels[k].id;
+								straps += '" width="100%" frameborder="0"></iframe></div>';
+								dashboards_list.push(allDashboards.dashboards[i].rows[j].panels[k].url + "?panelId="+ allDashboards.dashboards[i].rows[j].panels[k].id);
+							}
+							straps += '</div></div></div>';
+						}
+					}	
+				}
+			}	
+			/* Put the iframes innerHTML */
+			if (panelFlag == 1)
+				generalOverview = '<div class="col-sm-8"><div class="panel panel-primary"><div class="panel-heading">General Overview</div><div class="panel-body"><div class="row"><div class="col-sm-6"><div class="row"><div id="status" class="col-sm-4">' + status + '</div><div id="uptime" class="col-sm-8">' + uptime + '</div></div></div><div class="col-sm-6"><div id="ava" class="row"></div></div></div></div><div class="panel-body"><div id="myCarousel"></iframe><iframe id="iframe1" src="" width="0%" height= "340" frameborder="0"></iframe><iframe id="iframe2" src="" width="0%" height= "340" frameborder="0"></iframe></div></div></div></div><div class="col-sm-4"><div id="vertical" class="panel panel-primary">' + vertical + '</div></div>';
+			else
+				generalOverview = '<div class="col-sm-12"><div class="panel panel-primary"><div class="panel-heading">General Overview</div><div class="panel-body"><div class="row"><div class="col-sm-6"><div class="row"><div id="status" class="col-sm-4">' + status + '</div><div id="uptime" class="col-sm-8">' + uptime + '</div></div></div><div class="col-sm-6"><div id="ava" class="row"></div></div></div></div><div class="panel-body"><div id="myCarousel"></iframe><iframe id="iframe1" src="" width="0%" height= "340" frameborder="0"></iframe><iframe id="iframe2" src="" width="0%" height= "340" frameborder="0"></iframe></div></div></div></div>';
+			document.getElementById("generalOverview").innerHTML = generalOverview;
+			var availabilityWidth = parseInt(12/availabilityCount,10);
+			availability = availability.replace(/colWidth/g, availabilityWidth);
+			document.getElementById("ava").innerHTML = availability;
+			document.getElementById("dashboard").innerHTML = straps;
+			/* Run the Carosel */
+			const iframe_1 = document.getElementById("iframe1");
+			const iframe_2 = document.getElementById("iframe2");
+			iframe_1.src = dashboards_list[Math.floor(Math.random() * dashboards_list.length)];
+			iframe_1.width = "100%";
+			iframe_2.width = "0%";
+			var TIMEOUT = getTime();
+			setTimeout(load_next_url, TIMEOUT);
+		});
+	</script>
+</head>
+<body>
+	<!-- Sheare the JSON object from Node.js-->
+	<textarea style="display:none;" id="allDashboards" ><%= JSON.stringify(allLandscape)%></textarea>
+	<textarea style="display:none;" id="overview" ><%= JSON.stringify(overview)%></textarea>
+	<textarea style="display:none;" id="path" ><%= JSON.stringify(path)%></textarea>
+	<textarea  style="display:none;" id="allTimes" ><%= JSON.stringify(allTimes)%></textarea>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<!-- Header -->
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" id="nav-header" ></a>
+			</div>
+			<div class="nav navbar-nav navbar-right">
+		  		<a href="#"><img src="http://172.18.104.69:3000/public/img/grafana_icon.svg" style="position:relative;top:3px;left:400px;width:7%" alt="Image"> <img src="https://github.infra.hana.ondemand.com/avatars/u/144?s=200" style="position:relative;top:3px;left:410px;width:8%" alt="Image"> <img class="logo-image" src="https://www.sap.com/dam/application/shared/logos/sap-logo-svg.svg" style="position:relative;top:3px;left:420px" alt="Image">  </a>
+		  	</div> 
+		</div>
+	</nav>
+	<!-- General overview and vertical container-->
+	<div class="container-fluid">
+		<div id="generalOverview" class="row">
+		</div>
+	</div>
+	<!-- Body container-->
+	<div id="dashboard" class="container-fluid" >
+	</div>
+</body>
+</html>
+

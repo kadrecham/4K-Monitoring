@@ -1,0 +1,6 @@
+- landscape: landscape-overview
+  grafanaElasticIP: 172.18.104.69:3000
+  username: admin
+  password: ####
+  slideTime: 120
+  carouselTime: 15
