@@ -5,6 +5,8 @@ Web application for 4k monitor
 ### The Aim:
 Building an internal monitoring web application for the all HCP Big data team's landscapes.
 
+![alt tag](https://user-images.githubusercontent.com/25906706/28718148-fc29f042-73a4-11e7-83c3-a90a781b5ef9.png)
+
 ### Tools:
 - Node.js
 - JavaScript
